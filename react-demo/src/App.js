@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import UserList from "./components/UserList";
+import  {fetchUsers} from "./Api.js";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleFetchUsers = async () => {
+    setLoading(true);
+    const fetchedUsers = await fetchUsers();
+    setUsers(fetchedUsers);
+    setLoading(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Random Users</h1>
+      <button onClick={handleFetchUsers} disabled={loading}>
+        {loading ? "Loading..." : "Fetch Users"}
+      </button>
+      <UserList users={users} />
     </div>
   );
-}
+};
 
 export default App;
